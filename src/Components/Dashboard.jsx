@@ -30,6 +30,7 @@ import { Carousel } from 'react-responsive-carousel';
 import map from '../Images/map.png';
 import location from '../Images/location.png';
 import scanner from '../Images/qr-codes-svgrepo-com.png';
+import swal from 'sweetalert';
 
 
 
@@ -40,6 +41,29 @@ const images = [
 function Dashboard() {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [showMore, setShowMore] = useState(false);
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        phone: ''
+    });
+
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        });
+    };
+
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (!formData.name || !formData.email || !formData.phone) {
+            swal("Oops!", "Please fill in all the fields!", "error");
+            return;
+        }
+        swal("Success!", "Your quote request has been submitted!", "success");
+        setFormData({ name: '', email: '', phone: '' });
+    };
 
     const handleToggle = () => {
         setShowMore(prev => !prev);
@@ -75,7 +99,7 @@ function Dashboard() {
                         <img src={logo} alt="" className='logo' />
                         <FontAwesomeIcon icon={faHouse} />
                         <a href="#price" className='price'
-                        style={{ borderLeft: "1px solid silver", borderRight: "1px solid silver", padding: "5px" }}>
+                            style={{ borderLeft: "1px solid silver", borderRight: "1px solid silver", padding: "5px" }}>
                             <i className='bi bi-cash-coin' style={{ marginTop: "10px" }}></i>
                             <span style={{ fontSize: "14px", marginLeft: "5px" }}>Price</span>
                         </a>
@@ -83,8 +107,8 @@ function Dashboard() {
                             <i className="bi bi-buildings"></i>
                             <span style={{ fontSize: "14px", marginLeft: "5px" }}>Site & Floor Plan</span>
                         </a>
-                        <a href="#amenities" className='amenities' 
-                        style={{ borderLeft: "1px solid silver", borderRight: "1px solid silver", padding: "5px" }}>
+                        <a href="#amenities" className='amenities'
+                            style={{ borderLeft: "1px solid silver", borderRight: "1px solid silver", padding: "5px" }}>
                             <i className='bi bi-wifi'></i>
                             <span style={{ fontSize: "14px", marginLeft: "5px" }}>Amenities</span>
                         </a>
@@ -488,21 +512,25 @@ function Dashboard() {
                     </div>
                     <div className="contact-us">
                         <span style={{ fontWeight: "600", fontSize: "18px" }}>Get The Best Quote</span>
-                        <form action="">
+                        <form onSubmit={handleSubmit}>
                             <div className="fields">
                                 <div className="input-field">
-                                    <input type="text" placeholder='Name' />
+                                    <input type="text" placeholder='Name' name="name" value={formData.name}
+                                        onChange={handleChange} />
                                 </div>
 
                                 <div className="input-field">
-                                    <input type="email" placeholder='Email Address' />
+                                    <input type="email" placeholder='Email Address' name="email" value={formData.email}
+                                        onChange={handleChange} />
                                 </div>
 
                                 <div className="input-field">
-                                    <input type="tel" placeholder='Phone number' />
+                                    <input type="tel" placeholder='Phone number' name="phone" value={formData.phone}
+                                        onChange={handleChange} />
                                 </div>
 
-                                <button className='instant-call-btn' style={{ marginTop: "20px" }}>Get It Now</button>
+                                <button className='instant-call-btn' style={{ marginTop: "20px" }}
+                                type="submit">Get It Now</button>
                             </div>
                         </form>
                     </div>
